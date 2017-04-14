@@ -1,0 +1,124 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define size 20
+
+/*OPEN HASHING WITH LINEAR PROBING*/
+
+struct hash{
+    int data;
+    int key;
+};
+struct hash *hashtable[size];
+
+int hashfunction(int key)
+{
+    return key%size;
+}
+
+void insert(int key,int data)
+{
+    struct hash *temp=(struct hash*)malloc(sizeof(struct hash));
+    temp->data=data;
+    temp->key=key;
+
+    int hashindex = hashfunction(key);
+
+    if(hashtable[hashindex]==NULL)
+    {
+        hashtable[hashindex]=temp;
+
+    }
+    else
+    {
+        while(hashtable[hashindex]!=NULL && hashtable[hashindex]->key!=-1 )
+        {
+            hashindex++;
+            hashindex=hashindex%size;
+        }
+        hashtable[hashindex]=temp;
+    }
+}
+void del(struct hash* item)
+{
+    int key=item->key;
+    int hashindex = hashfunction(key);
+    int flag=0;
+
+    while(hashtable[hashindex]!=NULL)
+    {
+        if(hashtable[hashindex]->key==key)
+        {
+            hashtable[hashindex]->key=-1;
+            hashtable[hashindex]->data=-1;
+            flag=1;
+        }
+        hashindex++;
+        hashindex=hashindex%size;
+    }
+
+    if(flag==0)
+    printf("key not in table");
+
+
+}
+
+struct hash* search(int key)
+{
+
+    int hashindex = hashfunction(key);
+    while(hashtable[hashindex] != NULL)
+    {
+        if(hashtable[hashindex]->key == key)
+        {
+            return hashtable[hashindex];
+        }
+      hashindex++;
+      hashindex =hashindex%size;
+    }
+    return printf("key not in table");
+
+
+}
+void display()
+{
+    int i;
+    for(i=0;i<size;i++)
+    {
+        if(hashtable[i]!=NULL)
+        {
+
+            printf("%d \t %d \n",hashtable[i]->key,hashtable[i]->data);
+        }
+       //else
+        //{
+         //   printf("NULL \n");
+        //}
+
+    }
+
+}
+
+int main()
+{
+    struct hash *a=(struct hash*)malloc(sizeof(struct hash));
+    a->data=88;
+    a->key=3;
+
+    insert(34,56);
+    insert(45,78);
+    insert(42,676);
+    insert(55,88);
+    insert(1,5);
+    
+    printf("KEY \t DATA \n");
+    display();
+    
+    struct hash* item = search(4);
+    printf("\n");
+    del(a);
+    printf("\n");
+    printf("KEY \t DATA \n");
+    display();
+
+    return 0;
+}

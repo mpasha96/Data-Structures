@@ -1,0 +1,21 @@
+void insertionSort(struct NODE **start)
+{
+		struct NODE *temp,*pnt;
+		pnt=*start;
+		
+		while(pnt->next != NULL)
+		{
+			temp=pnt->next;
+			while(temp!=*start && (temp->data) < (temp->prev->data) )
+			{
+				
+					int t = temp->data;
+					temp->data=temp->prev->data;
+					temp->prev->data=t;
+				
+				  temp=temp->prev;
+			}
+			printList(*start);
+			pnt=pnt->next;
+		}
+}

@@ -1,0 +1,32 @@
+void bubblesort(struct NODE **start)
+{
+	struct NODE *temp1,*temp2,*last=NULL,*curr=*start;
+        temp1=*start;
+		
+		
+        while(curr!=NULL)
+	{		
+		 temp1=*start;
+		 temp2=temp1->next;
+
+		while((temp2)!=last)
+		{
+		
+			if(temp1->data > temp2->data)
+			{
+				int t=temp1->data;
+				temp1->data=temp2->data;
+				temp2->data=t;
+			}
+
+			temp1=temp1->next;
+			temp2=temp1->next;
+		}
+
+		last=temp1;
+		curr=curr->next;
+		printList(*start);
+	}
+	
+	
+}

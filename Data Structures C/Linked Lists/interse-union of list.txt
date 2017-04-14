@@ -1,0 +1,180 @@
+#include<stdio.h>
+struct NODE
+{
+int data;
+struct node *next;
+};
+
+//typedef struct node NODE;
+struct NODE *alloc(int);
+struct NODE *create();
+struct NODE *findlast(struct NODE *);
+struct NODE *difference(struct NODE *,struct NODE *);
+struct NODE *search(struct NODE *,int);
+void display(struct NODE *);
+struct NODE *getnode();
+struct NODE *unionlist(struct NODE *list1,struct NODE *list2);
+struct NODE *intersect(struct NODE *list1,struct NODE *list2);
+
+int main()
+{
+struct NODE *list1=NULL,*list2=NULL,*list3=NULL;
+printf("\nCreate first list.");
+list1=create();
+printf("\nCreate second list.");
+list2=create();
+printf("\n Data in first list: ");
+display(list1);
+printf("\n Data in second list: ");
+display(list2);
+
+
+ printf("\n\n Union of two list is: ");
+list3=unionlist(list1,list2);
+if(list3==NULL)
+printf("\nList of union is empty");
+else
+display(list3);
+printf("\n\n Intersection of two list: ");
+list3=intersect(list1,list2);
+if(list3==NULL)
+printf("\nThere is no common elements in list1 and list2");
+else
+display(list3);
+printf("\n\n Difference of two list: ");
+list3=difference(list1,list2);
+if(list3==NULL)
+printf("\nno elements left after doung difference");
+else
+display(list3);
+
+return 0;
+}
+struct NODE *alloc(int val)
+{
+struct NODE *temp;
+temp=(struct NODE *)malloc(sizeof(struct NODE));
+temp->data=val;
+temp->next=NULL;
+return temp;
+}
+struct NODE *getnode()
+{
+struct NODE *temp;
+temp=(struct NODE *)malloc(sizeof(struct NODE));
+printf("\nEnter the data: ");
+scanf("%d",&temp->data);
+temp->next=NULL;
+return temp;
+}
+struct NODE *search(struct NODE *list,int val)
+{
+struct NODE *ptr;
+for(ptr=list;ptr!=NULL && ptr->data!=val;ptr=ptr->next);
+return(ptr);
+}
+struct NODE *create()
+{
+struct NODE *ptr,*temp,*list=NULL;
+int n,i;
+printf("\n Enter how many nodes : ");
+scanf("%d",&n);
+for(i=0;i<n;i++)
+{
+temp=getnode();
+if(list==NULL)
+{
+list=temp;
+}
+else
+{
+ptr=findlast(list);
+ptr->next=temp;
+}
+}
+return(list);
+}
+struct NODE *findlast(struct NODE *list)
+{
+struct NODE *ptr;
+for(ptr=list;ptr->next!=NULL;ptr=ptr->next);
+return(ptr);
+}
+struct NODE *unionlist(struct NODE *list1,struct NODE *list2)
+{
+struct NODE *temp,*ptr1,*ptr2,*list3=NULL;
+int i,val;
+for(ptr1=list1;ptr1!=NULL;ptr1=ptr1->next)
+{
+temp=alloc(ptr1->data);
+if(list3==NULL)
+list3=temp;
+else
+{
+ptr2=findlast(list3);
+ptr2->next=temp;
+}
+}
+for(ptr1=list2;ptr1!=NULL;ptr1=ptr1->next)
+{
+ptr2=search(list1,ptr1->data);
+if(ptr2==NULL)
+{
+temp=alloc(ptr1->data);
+ptr2=findlast(list3);
+ptr2->next=temp;
+}
+}
+return(list3);
+}
+struct NODE *intersect(struct NODE *list1,struct NODE *list2)
+{
+struct NODE *temp,*ptr1,*ptr2,*list3=NULL;
+for(ptr1=list1;ptr1!=NULL;ptr1=ptr1->next)
+{
+ptr2=search(list2,ptr1->data);
+if(ptr2!=NULL)
+{
+temp=alloc(ptr1->data);
+if(list3==NULL)
+list3=temp;
+else
+{
+ptr2=findlast(list3);
+ptr2->next=temp;
+}
+}
+}
+return(list3);
+}
+
+
+
+struct NODE *difference(struct NODE *list1,struct NODE *list2)
+{
+struct NODE *temp,*ptr1,*ptr2,*list3=NULL;
+for(ptr1=list1;ptr1!=NULL;ptr1=ptr1->next)
+{
+ptr2=search(list2,ptr1->data);
+if(ptr2==NULL)
+{
+temp=alloc(ptr1->data);
+if(list3==NULL)
+list3=temp;
+else
+{
+ptr2=findlast(list3);
+ptr2->next=temp;
+}
+}
+}
+return(list3);
+}
+void display(struct NODE *list)
+{
+struct NODE *ptr;
+for(ptr=list;ptr!=NULL;ptr=ptr->next)
+printf("%d->",ptr->data);
+printf("NULL");
+}
+

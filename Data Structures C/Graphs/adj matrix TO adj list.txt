@@ -1,0 +1,125 @@
+#include<stdio.h>
+#include<conio.h>
+
+struct NODE
+{
+    int data;
+    struct NODE *next;
+
+};
+
+struct NODE *createnode(int);
+struct NODE *findlast(struct NODE *);
+void display(struct NODE *[],int);
+
+int main()
+{
+    struct NODE *ptr;
+    struct NODE *temp;
+    struct NODE *V[10];
+
+    int n;
+    int a[10][10];
+    int i,j;
+
+    printf("\n Enter total number of vertices : ");
+    scanf("%d",&n);
+
+    printf("\n Enter entries of an adjacency matrix :\n");
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+            {
+                printf("\n Enter a[%d][%d] : ",i+1,j+1);
+                scanf("%d",&a[i][j]);
+            }
+    }
+
+    printf("\n Entered Adjacency matrix is \n");
+    for(i=0;i<n;i++)
+    {
+        for( j=0;j<n;j++)
+        {
+            printf("\t %d ",a[i][j]);
+        }
+        printf("\n");
+    }
+
+    for(i=0;i<n;i++)
+    {
+        V[i]=NULL;
+    }
+
+
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            if(a[i][j]==1)
+        {
+            temp=createnode(j+1);
+
+            if(V[i]==NULL)
+            {
+                V[i]=temp;
+            }
+
+            else
+            {
+                ptr=findlast(V[i]);
+                ptr->next=temp;
+            }
+        }
+    }
+}
+
+    printf("\n The Adjacency list looks like \n");
+    display(V,n);
+    return 0;
+}
+
+struct NODE *createnode(int j)
+{
+    struct NODE * temp;
+    temp=(struct NODE *)malloc(sizeof(struct NODE));
+    temp->data=j;
+    temp->next=NULL;
+    return(temp);
+}
+
+struct NODE *findlast(struct NODE *V)
+{
+    struct NODE *ptr;
+    ptr=V;
+    while(ptr->next!=NULL)
+    {
+        ptr=ptr->next;
+    }
+    return(ptr);
+
+}
+
+void display(struct NODE *V[10],int n)
+{
+    struct NODE *ptr;
+    int i;
+
+    for(i=0;i<n;i++)
+    {
+        printf("\n %d",i+1);
+        ptr=V[i];
+
+        if(ptr==NULL)
+        {
+            printf(" NULL");
+        }
+
+        while(ptr!=NULL)
+        {
+            printf("->%d",ptr->data);
+            ptr=ptr->next;
+        }
+
+        printf("\n");
+    }
+}

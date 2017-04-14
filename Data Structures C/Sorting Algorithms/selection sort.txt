@@ -1,0 +1,24 @@
+void selectionsort(struct NODE **start)
+{
+		struct NODE *temp1,*temp2;
+        temp1=*start;
+		
+		
+        while(temp1!=NULL)
+	{		
+	temp2=temp1->next;	 
+		while((temp2)!=NULL)
+	{
+		
+		if(temp1->data > temp2->data)
+		{
+			int t=temp1->data;
+			temp1->data=temp2->data;
+			temp2->data=t;
+		}
+		temp2=temp2->next;
+	}
+		temp1=temp1->next;
+	}
+	
+}

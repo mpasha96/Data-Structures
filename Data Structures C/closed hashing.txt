@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define size 20
+
+/*CLOSED HASHING*/
+
+struct hash{
+    int data;
+    int key;
+    struct hash *next;
+};
+
+struct list {
+    struct hash *head;
+
+};
+
+struct list *hashtable = NULL;
+
+int hashfunction(int key)
+{
+    return key%size;
+}
+
+void insert(int key,int data)
+{
+    struct hash *temp=(struct hash*)malloc(sizeof(struct hash));
+    temp->data=data;
+    temp->key=key;
+    temp->next=NULL;
+
+    int hashindex = hashfunction(key);
+
+    if(hashtable[hashindex].head==NULL || hashtable[hashindex].head->key==-1)
+    {
+        hashtable[hashindex].head=temp;
+    }
+    else
+    {
+        temp->next=hashtable[hashindex].head;
+        hashtable[hashindex].head=temp;
+    }
+}
+
+void del(struct hash* item)
+{
+    int key=item->key;
+    int hashindex = hashfunction(key);
+    int flag=0;
+    struct hash *myNode=hashtable[hashindex].head;
+    struct hash *temp;
+
+    while(myNode!=NULL)
+    {
+        if(myNode->key==key)
+        {
+            flag=1;
+            if(myNode==hashtable[hashindex].head)
+            {
+                hashtable[hashindex].head=myNode->next;
+            }
+            else
+            {
+                temp->next = myNode->next;
+            }
+
+            free(myNode);
+            break;
+        }
+
+        temp = myNode;
+        myNode = myNode->next;
+    }
+
+    if(flag==0)
+    printf("key not in table");
+
+}
+
+struct hash* search(int key)
+{
+    int hashindex = hashfunction(key);
+    struct hash *myNode=hashtable[hashindex].head;
+
+    while(myNode != NULL)
+    {
+        if(myNode->key == key)
+        {
+            return myNode;
+        }
+        myNode=myNode->next;
+    }
+    return printf("key not in table");
+}
+
+void display()
+{
+    struct hash *myNode;
+    int i;
+    for(i=0;i<size;i++)
+    {
+        myNode = hashtable[i].head;
+        while(myNode != NULL)
+            {
+                printf("%d \t %d \n",myNode->key,myNode->data);
+                myNode=myNode->next;
+            }
+    }
+}
+
+int main()
+{
+    hashtable = (struct list *) calloc(size, sizeof(struct list));
+
+    insert(54,6);
+    insert(34,56);
+    insert(45,78);
+    insert(42,676);
+    insert(55,88);
+    insert(1,5);
+
+    printf("KEY \t DATA \n");
+    display();
+    printf("\n");
+
+    struct hash* item = search(1);
+    printf("item->key: %d and item->data %d",item->key,item->data);
+    printf("\n");
+
+    del(item);
+    printf("\n");
+    printf("KEY \t DATA \n");
+    display();
+
+    return 0;
+}

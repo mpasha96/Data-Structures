@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+
+
+//PASHAAAAAA
+
+
+struct stack{
+	int data;
+	struct stack *next;
+	
+}*top=NULL;
+
+void push(int data);
+int pop ();
+
+
+int main(int argc, char *argv[]) {
+	
+	
+	int x;
+	scanf("%d",&x);
+	push(x);
+	push(20);
+	push(30);
+	
+	/*while(top!=NULL)
+	{
+		int a=pop(&top);
+		printf("%d",a;
+		top=top->next;
+	}*/
+	while(top!=NULL){
+	
+	int a=pop();
+	printf("%d \n",a);
+	//int b=pop();
+	//printf("%d",b);
+}
+	
+	return 0;
+	
+	
+}
+
+void push(int data)
+{
+	struct stack *temp=(struct stack*)malloc(sizeof(struct stack));
+	temp->data=data;
+	temp->next=NULL;
+	if(top==NULL)
+	{
+		top=temp;
+	}
+	else
+	{
+		temp->next=top;
+		top=temp;
+	}
+}
+
+int pop()
+{
+	struct stack *temp=(struct stack*)malloc(sizeof(struct stack));
+	int flag=999;
+	if (top==NULL)
+	{
+		return flag;
+	}
+	else 
+	{
+	
+		temp=top;
+		top=top->next;
+		return (temp->data);
+		free(temp);
+		
+	}
+}
+

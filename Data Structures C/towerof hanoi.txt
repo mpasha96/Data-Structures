@@ -1,0 +1,337 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+
+
+// creatinmg 3 stack towers.
+struct tower1
+{
+       int data1;
+       struct tower1 *next1;
+}*top1=NULL; //*temp1=NULL;
+
+struct tower2
+{
+       int data2;
+       struct tower2 *next2;
+}*top2=NULL; //*temp2=NULL;
+
+struct tower3
+{
+       int data3;
+       struct tower3 *next3;
+}*top3=NULL; //*temp3=NULL;
+
+
+void push1(int data);
+int pop1();
+void push2(int data);
+int pop2();
+void push3(int data);
+int pop3();
+void print1();
+void print2();
+void print3();
+void TowerOfHanoi(int n);
+int stacktop ();
+
+int main(int argc, char *argv[])
+{
+    int n=0,i=0;
+    printf("input number of  disks: ");
+    scanf("%d", &n);
+    
+    for(i=n; i>=1; i--) //pushing numbers in tower1 in ascending orde.
+    {
+             push1(i);
+    }
+    
+    //print1();
+    //print2();
+    //print3();
+    
+    //push1(3);
+    //push1(2);
+    //push1(1);  
+    //print1();
+    TowerOfHanoi(n);
+  
+  system("PAUSE");	
+  return 0;
+}
+
+// fn for finding 1 at top of each stacj
+int stacktop ()
+{
+    if (top1 != NULL && top1->data1 == 1 )
+    {
+        return 1;
+    }
+    else if (top2 != NULL && top2->data2 == 1)
+    {
+        return 2;
+    }
+    else if (top3 != NULL && top3->data3 == 1)
+    {
+        return 3;
+    }
+}
+//creating push and pop functions for each stack tower.
+void push1(int data)
+{
+        
+	    struct tower1 *temp1=(struct tower1 *)malloc(sizeof(struct tower1));
+        temp1->data1 =data;
+        temp1->next1=NULL;
+     
+     if(top1==NULL)
+     {
+                   top1=temp1;
+     }
+     else 
+     {
+          temp1->next1=top1;
+          top1=temp1;
+     }
+     
+}
+
+int pop1()
+{
+     struct tower1 *temp1=(struct tower1 *)malloc(sizeof(struct tower1));
+     int flag=999;
+     
+     if (top1==NULL)
+     {
+                    return flag;
+     }
+     else 
+     {
+          temp1 =top1;
+          top1=top1->next1;
+          return (temp1->data1);
+          free(temp1);
+     }    
+}
+
+void push2(int data)
+{
+    struct tower2 *temp2=(struct tower2 *)malloc(sizeof(struct tower2));
+     temp2->data2=data;
+     temp2->next2=NULL;
+     
+     if(top2==NULL)
+     {
+                   top2=temp2;
+     }
+     else 
+     {
+          temp2->next2=top2;
+          top2=temp2;
+     }
+     
+}
+
+int pop2()
+{
+      struct tower2 *temp2=(struct tower2 *)malloc(sizeof(struct tower2));
+     int flag=999;
+     
+     if (top2==NULL)
+     {
+                    return flag;
+     }
+     else 
+     {
+          temp2 =top2;
+          top2=top2->next2;
+          return (temp2->data2);
+          free(temp2);
+     }    
+}
+
+void push3(int data)
+{
+      struct tower3 *temp3=(struct tower3 *)malloc(sizeof(struct tower3));
+     temp3->data3=data;
+     temp3->next3=NULL;
+     
+     if(top3==NULL)
+     {
+                   top3=temp3;
+     }
+     else 
+     {
+          temp3->next3=top3;
+          top3=temp3;
+     }
+     
+}
+
+int pop3()
+{
+    struct tower3 *temp3=(struct tower3 *)malloc(sizeof(struct tower3));
+     int flag=999;
+     
+     if (top3==NULL)
+     {
+                    return flag;
+     }
+     else 
+     {
+          temp3 =top3;
+          top3=top3->next3;
+          return (temp3->data3);
+          free(temp3);
+     }    
+}
+
+//print functions
+void print1()
+{
+     struct tower1 *temp1=(struct tower1 *)malloc(sizeof(struct tower1));
+     temp1=top1;
+     printf("\n tower 1: ");
+     while(temp1!=NULL)
+     {
+                        printf("%d",temp1->data1);
+                        temp1=temp1->next1;
+     }     
+     printf("\n");
+}
+
+void print2()
+{
+     struct tower2 *temp2=(struct tower2 *)malloc(sizeof(struct tower2));
+     temp2=top2;
+     printf("\n tower 2: ");
+     while(temp2!=NULL)
+     {
+                        printf("%d",temp2->data2);
+                        temp2=temp2->next2;
+     }     
+      printf("\n");
+}
+
+void print3()
+{
+    struct tower3 *temp3=(struct tower3 *)malloc(sizeof(struct tower3));
+     temp3=top3;
+     printf("\n tower 3: ");
+     while(temp3!=NULL)
+     {
+                        printf("%d",temp3->data3);
+                        temp3=temp3->next3;
+     }     
+      printf("\n");
+}
+
+void TowerOfHanoi(int n)
+{
+     int v1, v2, i, c,x;
+     for (i=0; i<(pow(2,n)); i++)
+     {
+         print1();
+         print2();
+         print3();
+         
+         c=stacktop(); //indicates tower which holds 1
+         
+         if(i%2==0) 
+         {
+            if (c == 1)
+            {
+                x=pop1();
+                push3(x);
+            }
+            else if (c == 2)
+            {
+                x=pop2();
+                push1(x);
+            }
+            else if (c == 3)
+            {
+                x=pop3();
+                push2(x);
+            }
+         }
+         else 
+         {
+             if (c == 1)
+            {
+                v1 = pop2();
+                v2 = pop3();
+                if (v1 < v2 && v2 != 999)
+                {
+                    push3(v2);
+                    push3(v1);
+                }
+                else if (v1 > v2 && v1 != 999)
+                {
+                    push2(v1);
+                    push2(v2);
+                }
+                else if (v2 == 999)
+                {
+                    push3(v1);
+                }
+                else if (v1 == 999)
+                {
+                    push2(v2);
+                }
+            }
+            else if (c == 2)
+            {
+                v1 = pop1();
+                v2 = pop3();
+                if (v1 < v2 && v2 != 999)
+                {
+                    push3(v2);
+                    push3(v1);
+                }
+                else if (v1 > v2 && v1 != 999)
+                {
+                    push1(v1);
+                    push1(v2);
+                }
+                else if (v2 == 999)
+                {
+                    push3(v1);
+                }
+                else if (v1 == 999)
+                {
+                    push1(v2);
+                }
+            }
+            else if (c == 3)
+            {
+                v1 = pop1();
+                v2 = pop2();
+                if (v1 < v2 && v2 != 999)
+                {
+                    push2(v2);
+                    push2(v1);
+                }
+                else if (v1 > v2 && v1 != 999)
+                {
+                    push1(v1);
+                    push1(v2);
+                }
+                else if (v2 == 999)
+                {
+                    push2(v1);
+                }
+                else if (v1 == 999)
+                {
+                    push1(v2);
+                }
+            }
+        }    
+     }
+}
+
+
+
+
+

@@ -1,0 +1,146 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 30
+ 
+struct edge  
+{
+    int source;
+	int dest;
+	int weight;
+};
+struct edge earray[MAX]; //array to contain all edges
+struct edge spanarray[MAX]; //array to contain mst edges
+
+int ecount; //index counter for earray
+int scount; //index counter for spanarray
+int Graph[MAX][MAX];
+int vertices; 
+
+void kruskal();
+int find(int belongs[],int vertexno);
+void union1(int belongs[],int c1,int c2);
+void selectionsort();
+void print();
+
+
+int main()
+{
+    printf("\nEnter number of vertices:");
+    scanf("%d",&vertices);
+    
+    printf("\nEnter the adjacency matrix:\n");
+    
+    int i;
+	int j;
+    for(i=0;i<vertices;i++)
+    {
+    	for(j=0;j<vertices;j++)
+    	{
+    		scanf("%d",&Graph[i][j]);
+		}
+	}
+        
+    kruskal();
+    print();
+    
+    return 0;
+}
+ 
+void kruskal()
+{
+    int belongs[MAX];
+	int i,j;
+	int x1,x2;
+	
+    ecount=0;
+    
+ //constructing array of edges along with their weights
+    for(i=1;i<vertices;i++)
+        for(j=0;j<i;j++)
+        {
+            if(Graph[i][j]!=0)
+            {
+                earray[ecount].source=i;
+                earray[ecount].dest=j;
+                earray[ecount].weight=Graph[i][j];
+                ecount++;
+            }
+        }
+ 
+ //sorting array of edges
+    selectionsort(); 
+    
+//initializing array of edge sets for cycle check    
+    for(i=0;i<vertices;i++)
+    {
+    	belongs[i]=i;
+	}
+        
+    
+    scount=0;
+
+//finding mst edges    
+    for(i=0;i<ecount;i++)
+    {
+        x1=find(belongs,earray[i].source);
+        x2=find(belongs,earray[i].dest);
+        
+        if(x1!=x2)
+        {
+            spanarray[scount]=earray[i];
+            scount=scount+1;
+            union1(belongs,x1,x2);
+        }
+    }
+}
+ 
+int find(int belongs[],int vertexno)
+{
+    return(belongs[vertexno]);
+}
+ 
+void union1(int belongs[],int x1,int x2)
+{
+    int i;   
+    for(i=0;i<vertices;i++)
+    {
+    	if(belongs[i]==x2)
+    	{
+    		  belongs[i]=x1;
+		}
+          
+	}
+        
+}
+ 
+void selectionsort()
+{
+    int i,j;
+    struct edge temp;
+    
+    for(i=1;i<ecount;i++)
+       {
+       	for(j=0;j<ecount-1;j++)
+            {
+            	if(earray[j].weight>earray[j+1].weight)
+            	{
+            		temp=earray[j];
+                	earray[j]=earray[j+1];
+                	earray[j+1]=temp;
+				}
+			}
+		} 
+}
+ 
+void print()
+{
+    int i,cost=0;
+    
+    for(i=0;i<scount;i++)
+    {
+        printf("\n%d\t%d\t%d",spanarray[i].source,spanarray[i].dest,spanarray[i].weight);
+        cost=cost+spanarray[i].weight;
+    }
+ 
+    printf("\n\nCost of the spanning tree=%d",cost);
+}

@@ -1,0 +1,91 @@
+
+#include <stdio.h>
+#include <limits.h>
+#include <stdbool.h>
+ 
+ 
+// sab se chhoti key value aegi jo abi tk mst me nai ai hai 
+int minKey(int key[], bool mstSet[],int V)
+{
+   // min me infinity dalne k lie
+   int min = 999 ,min_index;
+ int v ;
+   for ( v = 0; v < V; v++)
+     if (mstSet[v] == false && key[v] < min)
+       {	 min = key[v];
+	    min_index = v;}
+ 
+   return min_index;
+}
+ 
+// jitni khuari ki hai use print karne k lie
+int printMST(int parent[], int n,int V, int graph[V][V])
+{
+   printf("\n\nEdge   Weight\n");
+   int i ;
+   for (i = 1; i < V; i++)
+      printf("%d - %d    %d \n", parent[i], i, graph[i][parent[i]]);
+}
+ 
+// primms ka main function
+void primMST(int V,int graph[V][V])
+{
+     int parent[V]; // is array me construccted MST save krnge
+     int key[V];   // Key values used to pick minimum weight edge in cut
+     bool mstSet[V];  // To represent set of vertices not yet included in MST
+
+     // sari keys me INFINITE dalne k lie
+     int i ;
+	 for ( i = 0; i < V; i++)
+      {
+		  key[i] = 999; 
+		  mstSet[i] = false;
+	}
+ 
+     // include first 1st vertex in MST.
+     key[0] = 0;     // phle vertex ki key zero kar dge qk wo pick ho chuka hga
+     parent[0] = -1; // phli node hmesha mst ki root hti hai
+ 
+     //  MST me  "V" vertices hogi
+     int count;
+     for ( count = 0; count < V-1; count++)
+     {//minimum key vertex uthana hai jo avhi tak MSt me nai ai
+        
+        int u = minKey(key, mstSet,V);
+ 
+        // jo vertex utha li hai us ko MST me true kr dnge ta'k phir se na ae
+        mstSet[u] = true;
+ 
+        // Update key value and parent index of the adjacent vertices of
+        // the picked vertex. Consider only those vertices which are not yet
+        // included in MST
+        int v ;
+        for (v = 0; v < V; v++)
+ 
+           // graph[u][v]  non zero jab hi hga jab   adjacent vertices hnge
+           // mstSet[v] false jab ho sakta hai jav tak k wo vertice include na hui ho
+           // Update kr dnge key ko ager graph[u][v] chhota hga key[v] is se 
+          if ((graph[u][v] !=0)&& (mstSet[v] == false) && (graph[u][v] <  key[v]))
+				{
+
+			   parent[v]  = u;
+			    key[v] = graph[u][v];
+				}
+     }
+ 
+     // printing our Mehnat :P
+     printf("apka minimum spanning tree tayyar hai :D ,\n prims flavor k sth :P");
+     printMST(parent, V,V, graph);
+}
+
+
+// driver program to test above function
+int main()
+{
+	int V=4;
+	int graph[4][4] = { {0,5,10,0},{5,0,4,11},{10,4,0,5},{0,11,5,0} };
+
+   primMST(V,graph);
+ 
+    return 0;
+}

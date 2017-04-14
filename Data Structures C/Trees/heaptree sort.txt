@@ -1,0 +1,273 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+/*MAX HEAP */
+
+ struct Node {
+ 	int data;
+ 	struct Node *left;
+ 	struct Node *right;
+ 	struct Node *parent;
+
+ };
+ struct QNode{
+ 	struct Node *node;
+ 	struct QNode *next;
+ };
+
+ //Functions:
+void EnQueue(struct QNode **top,struct Node *node);
+struct Node *DeQueue();
+void insert(struct Node **root,int vti);
+int deleteRootNode(struct Node **root);
+void heapSort(struct Node **root);
+void print(struct Node *root);
+
+int main(int argc, char *argv[]) {
+
+struct Node *root=NULL;
+
+	insert(&root,1);
+	insert(&root,2);
+    insert(&root,3);
+	insert(&root,4);
+    insert(&root,5);
+    insert(&root,6);
+	insert(&root,7);
+	print(root);
+	heapSort(&root);
+
+	return 0;
+}
+void insert(struct Node **root,int vti)
+{
+	struct Node *temp=(struct Node *)malloc(sizeof(struct Node));
+	temp->data=vti;
+	temp->left=NULL;
+	temp->parent=NULL;
+	temp->right=NULL;
+
+
+		if(*root==NULL)
+		{
+			*root=temp;
+		}
+		else
+		{
+			struct Node *curr=*root;
+			struct QNode *top=NULL;
+			int inserted=0;
+	while(inserted!=1)
+	{
+		if(curr->left==NULL)
+		{
+
+			curr->left=temp;
+			temp->parent=curr;
+
+			inserted=1;
+		}
+		else if(curr->right==NULL)
+		{
+			curr->right=temp;
+			temp->parent=curr;
+
+			inserted=1;
+		}
+		else
+		{
+			EnQueue(&top,curr->left);
+			EnQueue(&top,curr->right);
+			curr=DeQueue(&top);
+		}
+	}
+
+	while(top!=NULL)
+	{
+		DeQueue(&top);
+	}
+//checking if tree is still a max heap
+	while ( temp->parent != NULL && temp->data > temp->parent->data)
+            {
+                //swapping nodes
+                int t1 = temp->data;
+                temp->data = temp->parent->data;
+                temp->parent->data = t1;
+
+
+                if (temp->parent->parent == NULL) return;
+                else
+                  temp=temp->parent;
+
+            }
+
+		}
+}
+void heapSort(struct Node **root)
+{
+    int i;
+    printf("\n");
+    i=deleteRootNode(root);
+    do{
+
+        printf(" %d ",i);
+         i=deleteRootNode(root);
+    }while(i != -1);
+}
+
+void print(struct Node *root)
+{
+    if(root==NULL)
+    {
+        printf("Heap is Empty !");
+        return;
+    }
+    struct QNode *top=NULL;
+    struct Node *curr=root;
+    EnQueue(&top,curr);
+    while(top != NULL)
+    {
+        curr=DeQueue(&top);
+        printf(" %d ",curr->data);
+        if(curr->left != NULL)
+        {
+            EnQueue(&top,curr->left);
+        }
+         if(curr->right != NULL)
+        {
+            EnQueue(&top,curr->right);
+        }
+    }
+}
+
+int deleteRootNode(struct Node **root)
+{
+    if(*root==NULL)
+		{
+		 return -1;
+		}
+    struct Node *lastKaParent;
+    int n=(*root)->data;
+            //returning root ka data and free(ing) root node
+		 if((*root)->left == NULL && (*root)->right==NULL)
+        {
+               struct Node *temp=*root;
+		    *root=NULL;
+		    free(*root);
+			return (temp)->data;
+        }
+		else
+		{
+			struct Node *curr=*root;
+			struct QNode *top=NULL;
+			lastKaParent=curr;
+	while(1)
+	{
+	    //no child
+        if(curr->left==NULL && curr->right==NULL)
+        {
+            break;
+        }
+        //1 child
+		else if(curr->left==NULL || curr->right == NULL)
+		{
+
+		   lastKaParent=curr;
+            break;
+
+		}
+		//2 child
+		else
+		{
+            lastKaParent=curr;
+			EnQueue(&top,curr->left);
+			EnQueue(&top,curr->right);
+			curr=DeQueue(&top);
+		}
+	}
+
+	while(top!=NULL)
+	{
+		DeQueue(&top);
+	}
+
+	if(lastKaParent->right != NULL)
+    {
+        (*root)->data=lastKaParent->right->data;
+        lastKaParent->right=NULL;
+        free(lastKaParent->right);
+    }
+    else
+    {
+        (*root)->data=lastKaParent->left->data;
+        lastKaParent->left=NULL;
+        free(lastKaParent->left);
+    }
+
+    //checking if tree is still a max heap
+    curr=*root;
+    while(curr->left != NULL && curr ->right !=NULL)
+    {
+        //checking if root->right->data is greater or root->left->data,to swap with root->data
+        if(curr->right->data > curr->left->data)
+        {
+            int temp=curr->data;
+            curr->data=curr->right->data;
+            curr->right->data=temp;
+
+            curr=curr->right;
+        }
+        else if (curr->right->data < curr->left->data)
+        {
+            int temp=curr->data;
+            curr->data=curr->left->data;
+            curr->left->data=temp;
+
+            curr=curr->left;
+        }
+
+    }
+	return n;
+}
+}
+void EnQueue(struct QNode **top,struct Node *node)
+{
+	struct QNode *temp=(struct QNode *)malloc(sizeof(struct QNode));
+	temp->node=node;
+	temp->next=NULL;
+
+	if(*top==NULL)
+	{
+		*top=temp;
+	}
+	else
+	{
+
+		struct QNode  *current=*top;
+
+	while(current->next!=NULL)
+	{
+		current=current->next;
+	}
+	current->next=temp;
+
+	}
+}
+struct Node *DeQueue(struct QNode **top)
+{
+
+	struct Node *value=NULL;
+	if (*top==NULL)
+	{
+		return NULL;
+	}
+	else
+	{
+
+	struct QNode *temp=*top;
+		*top=(*top)->next;
+		value= (temp->node);
+		free(temp);
+	}
+	return value;
+}

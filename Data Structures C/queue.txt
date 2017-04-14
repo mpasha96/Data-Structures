@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+
+
+//PASHAAAAAA
+
+
+struct stack{
+	int data;
+	struct stack *next;
+	
+}*top=NULL;
+
+
+
+
+int main(int argc, char *argv[]) {
+	
+	
+
+    EnQueue(10);
+	EnQueue(20);
+	EnQueue(30);
+	
+	/*while(top!=NULL)
+	{
+		int a=pop(&top);
+		printf("%d",a;
+		top=top->next;
+	}*/
+	while(top!=NULL){
+	
+	int a=DeQueue();
+	printf("%d \n",a);
+	//int b=pop();
+	//printf("%d",b);
+}
+	
+	return 0;
+	
+	
+}
+
+void EnQueue(int data)
+{
+	struct stack *temp=(struct stack*)malloc(sizeof(struct stack));
+	temp->data=data;
+	temp->next=NULL;
+	if(top==NULL)
+	{
+		top=temp;
+	}
+	else
+	{
+		struct stack *current=top;
+	while(current->next!=NULL)
+	{
+		current=current->next;
+	}
+	current->next=temp;
+	}
+}
+
+int DeQueue()
+{
+	
+	int flag=999;
+	int value=0;
+	if (top==NULL)
+	{
+		return flag;
+	}
+	else 
+	{
+		
+	struct stack *temp=top;
+		top=top->next;
+		return (temp->data);
+		free(temp);
+	}
+}

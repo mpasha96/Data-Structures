@@ -1,0 +1,120 @@
+void preOrderIterative(struct Node *root);
+void inOrderIterative(struct Node *root);
+void postOrderIterative(struct Node *root);
+
+
+void inOrderIterative(struct Node *root)
+{
+	
+	struct Node *current=root;
+	struct sNode *top=NULL;
+	int stop=0;
+	while(stop==0)
+	{
+	
+	if(current!=NULL)
+	{
+		
+		push(&top,current);
+		current=current->left;
+	}
+	else
+	{
+		if(isEmpty(top)==0)
+		{
+			current=pop(&top);
+			
+			printf(" %d ",current->data);
+			current=current->right;
+			
+		}
+		else
+		{
+		
+		stop=1; // if stack is empty means stop traversing
+		}
+	}
+	
+	
+	}
+	
+}
+void preOrderIterative(struct Node *root)
+{
+	
+	struct Node *current=root;
+	struct sNode *top=NULL;
+	int stop=0;
+	while(stop==0)
+	{
+	
+	if(current!=NULL)
+	{
+		printf(" %d ",current->data);
+		push(&top,current);
+		current=current->left;
+		
+	}
+	else
+	{
+		if(isEmpty(top)==0)
+		{
+			current=pop(&top);
+			current=current->right;
+			
+		}
+		else
+		{
+		
+		stop=1; // if stack is empty means stop traversing
+		}
+	}
+	
+	
+	}
+	
+}
+void postOrderIterative(struct Node *root)
+{
+	
+	struct Node *current=root;
+	struct sNode *top=NULL;
+	int stop=0;
+	while(stop==0)
+	{
+	
+	if(current!=NULL)
+	{
+	
+		push(&top,current);
+		current=current->left;
+		
+	}
+	else
+	{
+		current=pop(&top);
+		if(isEmpty(top)==0)//stack is not empty
+		{
+		if(current!=NULL)
+		{
+			push(&top,current);
+			current=current->right;
+		}
+		else
+		{
+			//current=pop(&top);
+			printf(" %d ",current->data);
+		}
+		}
+		else
+		{
+		
+		stop=1; // if stack is empty means stop traversing
+		}
+	}
+	
+	
+	}
+	
+} 
+
